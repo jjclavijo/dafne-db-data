@@ -8,6 +8,10 @@
 #La lista de estaciones disponibles puede bajarse directamente:
 #
 
+default: 
+	@echo Visite http://geodesy.unr.edu antes de usar este makefile
+	@echo Sea responsable y no sobrecargue de tráfico inutil la página
+
 puntos-http.lonlath:
 	-mkdir http-nevada-st_list
 	cd http-nevada-st_list;\
@@ -54,4 +58,11 @@ terremotos/5.5.pgdump: terremotos
 	curl "https://earthquake.usgs.gov/fdsnws/event/1/query.geojson?starttime=1994-01-10%2000:00:00&endtime=2020-01-17%2023:59:59&minmagnitude=5.5&orderby=time" -o 5.5+.geojson;
 	ogr2ogr -f PGDump terremotos/5.5+.pgdump terremotos/5.5+.geojson -nln usgs_sismos;
 	ln -s terremotos/5.5+.pgdump $@
+
+TAG:="jjclavijo/dafne-db"
+VERSION:=data-21.01
+
+.PHONY: docker-image
+docker-image:
+	docker build . -t ${TAG}:${VERSION}
 
